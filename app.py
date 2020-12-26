@@ -55,11 +55,13 @@ model = crnn.CRNN(params.imgH, params.nc, nclass, params.nh)
 if torch.cuda.is_available():
     model = model.cuda()
 
+DEVICE = torch.device('cpu')
 # load model
 print('loading pretrained model from %s' % model_path)
 if params.multi_gpu:
     model = torch.nn.DataParallel(model)
-model.load_state_dict(torch.load(model_path))
+#model.load_state_dict(torch.load(model_path))
+model.load_state_dict(torch.load(model_path,map_location=DEVICE))
 
 converter = utils.strLabelConverter(params.alphabet)
 transformer = dataset.resizeNormalize((params.imgW, params.imgH))
